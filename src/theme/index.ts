@@ -5,7 +5,7 @@ export const COLORS = {
   primary: '#1E2022',
   secondary: '#302e53',
   third: '#D07017',
-  darkWhite: '#f0f0f0',
+  white: '#ffffff',
 };
 
 export const FONTS = {
@@ -18,4 +18,6 @@ const overrides = {
   ...globalStyles,
 };
 
-export default extendTheme(overrides);
+const theme = extendTheme(overrides);
+
+export { theme };
