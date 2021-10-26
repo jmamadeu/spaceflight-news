@@ -1,6 +1,11 @@
 {
   "name": "space-flight-news",
   "version": "0.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "João Amadeu",
+    "email": "jmamadeu@gmail.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -14,6 +19,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@vitejs/plugin-react": "^1.0.0",
+    "tslib": "^2.3.1",
     "typescript": "^4.3.2",
     "vite": "^2.6.4"
   }
