@@ -101,11 +101,11 @@ export function App() {
             width={50}
             height={50}
           />
-          <Text as='h2' fontSize='2xl' marginTop={4}>
+          <Text color="third" as='h2' fontSize='2xl' marginTop={4}>
             Space Flight News
           </Text>
 
-          <Box>{isLoading && <Spinner size='xl' />}</Box>
+          <Box marginTop={4}>{isLoading && <Spinner size='xl' />}</Box>
         </Box>
 
         <Divider />
@@ -127,7 +127,7 @@ export function App() {
           ))}
 
           <Box>
-            {!data?.length && (
+            {!data?.length && !isLoading && (
               <Alert status='warning'>
                 <AlertIcon />
                 There's no flights with this title
