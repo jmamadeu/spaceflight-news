@@ -6,6 +6,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalFooter,
   ModalOverlay,
   useDisclosure
 } from '@chakra-ui/react';
@@ -14,7 +15,6 @@ import { SpaceFlightNewsProperties } from '../hooks/use-space-flight-news';
 type SpaceFlightDetailsProperties = {
   spaceFlight: SpaceFlightNewsProperties;
   isInverted: boolean;
-  
 };
 
 const ImageFlight = ({
@@ -32,7 +32,7 @@ const ImageFlight = ({
 
 export type DetailsFlight = Partial<SpaceFlightNewsProperties> & {
   variant?: string;
-  onOpen?: () => void
+  onOpen?: () => void;
 };
 
 const DetailsFlight = ({
@@ -41,32 +41,28 @@ const DetailsFlight = ({
   summary,
   url,
   variant = '',
-  onOpen = () => {}
+  onOpen = () => {},
 }: DetailsFlight) => (
-  <Box
-    marginLeft={6}
-    display='flex'
-    flexDirection='column'
-    justifyContent='space-between'>
-    <Text as='h4' fontWeight='bold'>
+  <Box display='flex' flexDirection='column' justifyContent='space-between'>
+    <Text color='third' as='h4' fontWeight='bold'>
       {title}
     </Text>
-    <Box display='flex' justifyContent='space-between'>
-      <Text as='span' fontSize='small'>
+    <Box display='flex' justifyContent='space-between' marginBottom={3}>
+      <Text color='secondary' as='span' fontSize='small'>
         {publishedAt}
       </Text>
-      {variant ? (
-        <Link isExternal href={url}>
+      {!variant ? (
+        <Link color='secondary' isExternal href={url}>
           NewsSite
         </Link>
       ) : null}
     </Box>
-    <Text as='p' noOfLines={4}>
+    <Text color='primary' as='p' noOfLines={4}>
       {summary}
     </Text>
 
-    <Box>
-      {variant ? <Button>Go to website</Button> : <Button onClick={onOpen}>Show more</Button>}
+    <Box marginTop={2}>
+      {!variant && <Button onClick={onOpen}>Show more</Button>}
     </Box>
   </Box>
 );
@@ -84,8 +80,18 @@ export function SpaceFlightNewsItem({
         <ModalContent>
           <ModalBody marginTop={4} display='flex' flexDirection='row'>
             <ImageFlight {...spaceFlight} />
-            <DetailsFlight {...spaceFlight} variant={'modal'} />
+
+            <Box marginLeft={6}>
+              <DetailsFlight variant='modal' {...spaceFlight} />
+            </Box>
           </ModalBody>
+          <ModalFooter justifyContent='center'>
+            <Button variant='link' colorScheme='blue' mr={3}>
+              <Link href={spaceFlight.url} isExternal>
+                Go to the website
+              </Link>
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
       <Box
@@ -97,11 +103,15 @@ export function SpaceFlightNewsItem({
         {isInverted ? (
           <>
             <ImageFlight {...spaceFlight} />
-            <DetailsFlight {...spaceFlight} onOpen={onOpen} />
+            <Box marginLeft={6}>
+              <DetailsFlight {...spaceFlight} onOpen={onOpen} />
+            </Box>
           </>
         ) : (
           <>
-            <DetailsFlight {...spaceFlight} onOpen={onOpen} />
+            <Box marginRight={6}>
+              <DetailsFlight {...spaceFlight} onOpen={onOpen} />
+            </Box>
             <ImageFlight {...spaceFlight} />
           </>
         )}

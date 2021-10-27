@@ -12,21 +12,21 @@ export type SpaceFlightNewsProperties = {
 
 type SpaceFlightSearchOptions = {
   limit?: number;
-  order?: string;
+  sortParam?: string;
   search?: string;
 };
 
 export function useSpaceFlightNews({
   limit = 10,
-  order = '',
+  sortParam = '',
   search = '',
 }: SpaceFlightSearchOptions) {
   return useQuery(
-    ['spaceFlightNews', limit, order],
+    ['spaceFlightNews', limit, sortParam, search],
     () =>
       api
         .get<SpaceFlightNewsProperties[]>(
-          `/articles?_limit=${limit}&_sort=${order}&title_contains=${search}`
+          `/articles?_limit=${limit}&_sort=${sortParam}&title_contains=${search}`
         )
         .then((res) => res.data),
     { keepPreviousData: true }

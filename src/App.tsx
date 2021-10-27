@@ -1,5 +1,7 @@
 import { Box, Container } from '@chakra-ui/layout';
 import {
+  Alert,
+  AlertIcon,
   Button,
   Divider,
   Image,
@@ -13,28 +15,41 @@ import {
   Spinner,
   Text
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import {
   FiChevronDown as FiChevronDownIcon,
   FiSearch as FiSearchIcon
 } from 'react-icons/fi';
 import { SpaceFlightNewsItem } from './components/space-flight-item';
+import { useDebounce } from './hooks/use-debounce';
 import { useSpaceFlightNews } from './hooks/use-space-flight-news';
+import { getQueryParam, updateQueryParam } from './utils/update-query-params';
+
+const PAGE_LIMIT = 10;
 
 export function App() {
-  const [order, setOrder] = useState('');
-  const [limit, setLimit] = useState(1);
-  const [search, setSearch] = useState('');
+  const [sortParam, setSortParam] = useState('');
+  const [limit, setLimit] = useState(PAGE_LIMIT);
+  const [searchTerm, setSearchTerm] = useState(getQueryParam('search'));
+
+  const debouncedSearchTerm = useDebounce(searchTerm);
 
   const { data, isLoading } = useSpaceFlightNews({
     limit,
-    order,
-    search,
+    sortParam,
+    search: debouncedSearchTerm,
   });
 
-  const handleChangeOrder = async (value: string = '') => setOrder(value);
+  const handleChangeSortParam = async (value: string = '') =>
+    setSortParam(value);
 
-  const handleChangeLimit = () => setLimit((old) => old + 1);
+  const handleChangeLimit = () => setLimit((old) => old + PAGE_LIMIT);
+
+  const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
+    setSearchTerm(e.currentTarget.value);
+
+    updateQueryParam('search', e.currentTarget.value);
+  };
 
   return (
     <>
@@ -49,7 +64,12 @@ export function App() {
                     pointerEvents='none'
                     children={<FiSearchIcon />}
                   />
-                  <Input type='search' placeholder='Search' />
+                  <Input
+                    type='search'
+                    placeholder='Search'
+                    onChange={handleInputChange}
+                    value={searchTerm}
+                  />
                 </InputGroup>
               </Box>
               <Menu>
@@ -57,10 +77,11 @@ export function App() {
                   Sort
                 </MenuButton>
                 <MenuList>
-                  <MenuItem onClick={() => handleChangeOrder('publishedAt')}>
+                  <MenuItem
+                    onClick={() => handleChangeSortParam('publishedAt')}>
                     older
                   </MenuItem>
-                  <MenuItem onClick={() => handleChangeOrder('')}>
+                  <MenuItem onClick={() => handleChangeSortParam('')}>
                     news
                   </MenuItem>
                 </MenuList>
@@ -105,12 +126,25 @@ export function App() {
             </Box>
           ))}
 
-          <Box marginTop={8} marginBottom={8}>
-            <Button
-              onClick={handleChangeLimit}>
-              Load More
-            </Button>
+          <Box>
+            {!data?.length && (
+              <Alert status='warning'>
+                <AlertIcon />
+                There's no flights with this title
+              </Alert>
+            )}
           </Box>
+
+          {data?.length ? (
+            <Box marginTop={8} marginBottom={8}>
+              <Button
+                isLoading={isLoading}
+                loadingText='Loading...'
+                onClick={handleChangeLimit}>
+                Load More
+              </Button>
+            </Box>
+          ) : null}
         </Container>
       </Box>
     </>
