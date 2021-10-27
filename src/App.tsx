@@ -10,63 +10,34 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Modal,
-  ModalBody, ModalContent,
-  ModalFooter, ModalOverlay,
-  Text,
-  useDisclosure
+  Spinner,
+  Text
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import {
   FiChevronDown as FiChevronDownIcon,
   FiSearch as FiSearchIcon
 } from 'react-icons/fi';
+import { SpaceFlightNewsItem } from './components/space-flight-item';
+import { useSpaceFlightNews } from './hooks/use-space-flight-news';
 
 export function App() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [order, setOrder] = useState('');
+  const [limit, setLimit] = useState(1);
+  const [search, setSearch] = useState('');
+
+  const { data, isLoading } = useSpaceFlightNews({
+    limit,
+    order,
+    search,
+  });
+
+  const handleChangeOrder = async (value: string = '') => setOrder(value);
+
+  const handleChangeLimit = () => setLimit((old) => old + 1);
 
   return (
     <>
-      <Modal size='lg' isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody marginTop={4} display='flex' flexDirection='row'>
-            <Image
-              src='https://spacenews.com/wp-content/uploads/2021/08/elsa-d.jpg'
-              alt='space image'
-              width={250}
-              height={180}
-              background='black'
-            />
-            <Box
-              marginLeft={6}
-              display='flex'
-              flexDirection='column'
-              justifyContent='space-between'>
-              <Text as='h4' fontWeight='bold'>
-                Lorem ipsum, dolor sit amet consectetur
-              </Text>
-              <Box display='flex' justifyContent='space-between'>
-                <Text as='span' fontSize='small'>
-                  dd/mm/yyyy
-                </Text>
-              </Box>
-              <Text as='p' noOfLines={4}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Quibusdam, sed. Illum doloremque ducimus ad recusandae neque
-                porro temporibus quidem cupiditate consequuntur obcaecati
-                quibusdam incidunt, soluta saepe voluptatibus, omnis nostrum
-                quasi?
-              </Text>
-            </Box>
-          </ModalBody>
-
-          <ModalFooter justifyContent='center'>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Go Back
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
       <Box as='main'>
         <Box as='section'>
           <Box as='aside' display='flex' justifyContent='space-between'>
@@ -86,8 +57,12 @@ export function App() {
                   Sort
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>older</MenuItem>
-                  <MenuItem>news</MenuItem>
+                  <MenuItem onClick={() => handleChangeOrder('publishedAt')}>
+                    older
+                  </MenuItem>
+                  <MenuItem onClick={() => handleChangeOrder('')}>
+                    news
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Box>
@@ -108,6 +83,8 @@ export function App() {
           <Text as='h2' fontSize='2xl' marginTop={4}>
             Space Flight News
           </Text>
+
+          <Box>{isLoading && <Spinner size='xl' />}</Box>
         </Box>
 
         <Divider />
@@ -119,50 +96,20 @@ export function App() {
           display='flex'
           alignItems='center'
           flexDirection='column'>
-          <Box
-            as='article'
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-            flexDirection={{ sm: 'column', md: 'row' }}>
-            <Image
-              src='https://spacenews.com/wp-content/uploads/2021/08/elsa-d.jpg'
-              alt='space image'
-              width={250}
-              height={180}
-              background='black'
-            />
-            <Box
-              marginLeft={6}
-              display='flex'
-              flexDirection='column'
-              justifyContent='space-between'>
-              <Text as='h4' fontWeight='bold'>
-                Lorem ipsum, dolor sit amet consectetur
-              </Text>
-              <Box display='flex' justifyContent='space-between'>
-                <Text as='span' fontSize='small'>
-                  dd/mm/yyyy
-                </Text>
-                <Text as='span' fontSize='small'>
-                  News Site
-                </Text>
-              </Box>
-              <Text as='p' noOfLines={4}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Quibusdam, sed. Illum doloremque ducimus ad recusandae neque
-                porro temporibus quidem cupiditate consequuntur obcaecati
-                quibusdam incidunt, soluta saepe voluptatibus, omnis nostrum
-                quasi?
-              </Text>
-
-              <Box>
-                <Button onClick={onOpen}>Show more</Button>
-              </Box>
+          {data?.map((flight, index) => (
+            <Box key={flight.id} marginBottom={6}>
+              <SpaceFlightNewsItem
+                spaceFlight={flight}
+                isInverted={(index + 1) % 2 === 0}
+              />
             </Box>
-          </Box>
+          ))}
+
           <Box marginTop={8} marginBottom={8}>
-            <Button>Load More</Button>
+            <Button
+              onClick={handleChangeLimit}>
+              Load More
+            </Button>
           </Box>
         </Container>
       </Box>
