@@ -95,6 +95,7 @@ export function SpaceFlightNewsItem({
         </ModalContent>
       </Modal>
       <Box
+        data-testid='flight-item'
         as='article'
         display='flex'
         justifyContent='center'

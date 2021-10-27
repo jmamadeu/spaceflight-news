@@ -4,7 +4,7 @@ import { api } from '../clients/api';
 export type SpaceFlightNewsProperties = {
   title: string;
   summary: string;
-  publishedAt: Date;
+  publishedAt: Date | string;
   url: string;
   imageUrl: string;
   id: string;
