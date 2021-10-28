@@ -10,12 +10,9 @@ import {
   ModalOverlay,
   useDisclosure
 } from '@chakra-ui/react';
-import { SpaceFlightNewsProperties } from '../hooks/use-space-flight-news';
-
-type SpaceFlightDetailsProperties = {
-  spaceFlight: SpaceFlightNewsProperties;
-  isInverted: boolean;
-};
+import {
+  DetailsFlightProperties, SpaceFlightDetailsProperties, SpaceFlightNewsProperties
+} from '../models/space-flight-news';
 
 const ImageFlight = ({
   imageUrl,
@@ -30,11 +27,6 @@ const ImageFlight = ({
   />
 );
 
-export type DetailsFlight = Partial<SpaceFlightNewsProperties> & {
-  variant?: string;
-  onOpen?: () => void;
-};
-
 const DetailsFlight = ({
   title,
   publishedAt,
@@ -42,7 +34,7 @@ const DetailsFlight = ({
   url,
   variant = '',
   onOpen = () => {},
-}: DetailsFlight) => (
+}: DetailsFlightProperties) => (
   <Box display='flex' flexDirection='column' justifyContent='space-between'>
     <Text color='third' as='h4' fontWeight='bold'>
       {title}

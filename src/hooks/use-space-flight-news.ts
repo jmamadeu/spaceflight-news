@@ -1,20 +1,9 @@
 import { useQuery } from 'react-query';
 import { api } from '../clients/api';
-
-export type SpaceFlightNewsProperties = {
-  title: string;
-  summary: string;
-  publishedAt: Date | string;
-  url: string;
-  imageUrl: string;
-  id: string;
-};
-
-type SpaceFlightSearchOptions = {
-  limit?: number;
-  sortParam?: string;
-  search?: string;
-};
+import {
+  SpaceFlightNewsProperties,
+  SpaceFlightSearchOptions,
+} from '../models/space-flight-news';
 
 export function useSpaceFlightNews({
   limit = 10,
