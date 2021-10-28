@@ -20,10 +20,12 @@ import {
   FiChevronDown as FiChevronDownIcon,
   FiSearch as FiSearchIcon
 } from 'react-icons/fi';
+import logo from './assets/rocket.png';
 import { SpaceFlightNewsItem } from './components/space-flight-item';
 import { useDebounce } from './hooks/use-debounce';
 import { useSpaceFlightNews } from './hooks/use-space-flight-news';
 import { getQueryParam, updateQueryParam } from './utils/update-query-params';
+
 
 const PAGE_LIMIT = 10;
 
@@ -96,7 +98,7 @@ export function App() {
           flexDirection='column'
           alignItems='center'>
           <Image
-            src='/src/assets/rocket.png'
+            src={logo}
             alt='SpaceFlightNewsLogo'
             width={50}
             height={50}
