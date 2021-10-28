@@ -5,7 +5,7 @@
 </p>
 
 Simple react app to fetch `Space-flights-news` data and list them with some features like: pagination. You can check the [api-spaceflight-news](https://api.spaceflightnewsapi.net/v3/documentation)
-You can see the video presentation [here](https://github/jmamadeu/spacefligts-news/blob/main/spaceflight-news.mp4)
+You can see the video presentation [here](https://youtu.be/brkX3CntMdE)
 
 Att: Check this out in [live]()
 
